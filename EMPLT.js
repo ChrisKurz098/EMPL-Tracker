@@ -1,6 +1,7 @@
-const inquirer = require('inquirer');
-const DB = require('mysql2');
-const runFunction = require('./util/functions.js');
+
+const userPrompts = require('./util/prompts');
+const runFunction = require('./util/functions');
+
 
 
 console.log(`
@@ -17,48 +18,29 @@ console.log(`
 `);
 
 
-function mainPrompt() {
 
-    return inquirer.prompt([
-        {
-            type: 'list',
-            name: 'answer',
-            message: 'Please Select an Option: ',
-            choices: [
-                'View All Departments',
-                'View All Roles',
-                'View All Employees',
-                'Add A Department',
-                'Add A Role',
-                'Add An Employee',
-                'Update An Employee Role',
-                'Update Employee Manager',
-                'View Employees By Manager',
-                'Veiw Employees By Department',
-                'Delete Catagory Type',
-                'View Department Budget',
-                'Quit'
-            ]
-        }
-    ]);
-}
+
 
 
 
 
 async function app() {
-    let { answer } = await mainPrompt();
+    let { answer } = await userPrompts.mainPrompt();
 
-    if (answer === 'Quit') return;
+    if (answer === 'Quit') {
+        console.log('Bye!');
+        return;
+    };
 
-    //convert first letter to lower for camelCase
-    answer = answer.charAt(0).toLowerCase() + answer.slice(1)
+    //make first letter lower case
+    answer = answer.charAt(0).toLowerCase() + answer.slice(1);
     //remove spaces
     answer = answer.split(' ').join('');
-    console.log(typeof answer, answer);
-    runFunction[answer]();
-    app();
-}
 
+    //run selected fucntion
+      runFunction[answer]();
+
+    app();
+};
 
 app();
