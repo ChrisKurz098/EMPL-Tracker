@@ -1,59 +1,80 @@
 
-const displayTable = require('./displayTable');
-const addData = require('./addData');
+const userPrompts = require('../util/prompts');
+const sqlCommand = require('./sqlCommands');
+
 
 
 const runFunction = {
-    viewAllDepartments() {
- 
-       displayTable.departments();
+     async viewAllDepartments() {
+        await sqlCommand.showDepartments()
+    },
+    /////
+    async viewAllRoles() {
+        await sqlCommand.showRoles();
+    },
+    /////
+    async viewAllEmployees() {
+       await sqlCommand.showEmployees();
+    },
+    /////
+   async addADepartment() {
+        await userPrompts.addDepartment()
+        .then( ({newDepName}) => {
+            if (newDepName !== '')
+            {
+            sqlCommand.addDepartment(newDepName);
+            console.log(`\n${newDepName} added to department list \n`);
+            } else {
+                console.log(`\ncanceled\n`);
+            }
+        });
 
     },
     /////
-    viewAllRoles() {
-        // displayTable.roles();
+    async addARole() {
+        await userPrompts.addRole()
+        .then( ({newTitle,newSalary,depID}) => {
+            if (newTitle !== '')
+            {
+            sqlCommand.addDepartment(newTitle,newSalary,depID);
+            console.log(`\n${newTitle} added to roles list\n`);
+            } else {
+                console.log(`\ncanceled\n`);
+            }
+        });
     },
     /////
-    viewAllEmployees() {
-        // displayTable.employee();
-    },
-    /////
-    addADepartment() {
-        console.log('4');
-    },
-    /////
-    addARole() {
-        console.log('5');
-    },
-    /////
-    addAnEmployee() {
+    async addAnEmployee() {
         console.log('6');
     },
     /////
-    updateAnEmployeeRole() {
+    async updateAnEmployeeRole() {
         console.log('7');
     },
     /////
-    updateEmployeeManager() {
+    async updateEmployeeManager() {
         console.log('8');
     },
     /////
-    viewEmployeesByManager() {
+    async viewEmployeesByManager() {
         console.log('9');
     },
     /////
-    veiwEmployeesByDepartment() {
+    async veiwEmployeesByDepartment() {
         console.log('10');
     },
     /////
-    deleteCatagoryType() {
+    async deleteCatagoryType() {
         console.log('Department, Role, Employee');
     },
     /////
-    viewDepartmentBudget() {
+    async viewDepartmentBudget() {
         console.log('11')
     }
 };
 
 
+
+
+//////////////////////////////////
 module.exports = runFunction;

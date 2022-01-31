@@ -24,12 +24,13 @@ console.log(`
 
 
 
-async function app() {
+
+    async function app() {
     let { answer } = await userPrompts.mainPrompt();
 
     if (answer === 'Quit') {
         console.log('Bye!');
-        return;
+        process.exit();
     };
 
     //make first letter lower case
@@ -38,9 +39,13 @@ async function app() {
     answer = answer.split(' ').join('');
 
     //run selected fucntion
-      runFunction[answer]();
+     await runFunction[answer]();
 
     app();
 };
 
+//run app on boot
 app();
+
+
+

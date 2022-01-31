@@ -3,7 +3,9 @@
 // 'Add An Employee',
 
 module.exports = {
-    department() {},
+    department() {
+        
+    },
     role() {},
     employee() {}
 };

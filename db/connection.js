@@ -5,6 +5,9 @@ const DB = mySql.createConnection({
     user: 'root',
     password: '(Bd2%)~5-k',
     database: 'employees'
-});
+},
+    console.log('Connected to the election database.')
+);
+
 
 module.exports = DB;
