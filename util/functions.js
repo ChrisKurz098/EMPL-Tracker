@@ -5,7 +5,7 @@ const sqlCommand = require('./sqlCommands');
 
 
 const runFunction = {
-     async viewAllDepartments() {
+    async viewAllDepartments() {
         await sqlCommand.showDepartments()
     },
     /////
@@ -14,38 +14,44 @@ const runFunction = {
     },
     /////
     async viewAllEmployees() {
-       await sqlCommand.showEmployees();
+        await sqlCommand.showEmployees();
     },
     /////
-   async addADepartment() {
+    async addADepartment() {
         await userPrompts.addDepartment()
-        .then( ({newDepName}) => {
-            if (newDepName !== '')
-            {
-            sqlCommand.addDepartment(newDepName);
-            console.log(`\n${newDepName} added to department list \n`);
-            } else {
-                console.log(`\ncanceled\n`);
-            }
-        });
+            .then(async ({ newDepName }) => {
+                if (newDepName !== '') {
+                   await sqlCommand.addDepartment(newDepName);
+                    console.log(`\n${newDepName} added to department list \n`);
+                } else {
+                    console.log(`\ncanceled\n`);
+                }
+            });
 
     },
     /////
     async addARole() {
         await userPrompts.addRole()
-        .then( ({newTitle,newSalary,depID}) => {
-            if (newTitle !== '')
-            {
-            sqlCommand.addDepartment(newTitle,newSalary,depID);
-            console.log(`\n${newTitle} added to roles list\n`);
-            } else {
-                console.log(`\ncanceled\n`);
-            }
-        });
+            .then(async ({ newTitle, newSalary, depID }) => {
+                if (newTitle !== '') {
+                    await sqlCommand.addRole(newTitle, newSalary, depID);
+                    console.log(`\n${newTitle} added to roles list\n`);
+                } else {
+                    console.log(`\ncanceled\n`);
+                }
+            });
     },
     /////
     async addAnEmployee() {
-        console.log('6');
+        await userPrompts.addEmployee()
+            .then(async ({ first, last, role, manager }) => {
+                if (first !== '') {
+                   await sqlCommand.addEmployee(first, last, role, manager);
+                    console.log(`\n${first} ${last} added to employee list\n`);
+                } else {
+                    console.log(`\ncanceled\n`);
+                }
+            });
     },
     /////
     async updateAnEmployeeRole() {

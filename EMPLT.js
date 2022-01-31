@@ -1,10 +1,13 @@
 
+console.log(`loading database...`);
+
 const userPrompts = require('./util/prompts');
 const runFunction = require('./util/functions');
 
 
 
 console.log(`
+Welcom to:
  _______ ___ ___ _______ ___        _______                 __               
 |   _   |   Y   |   _   |   |______|       .----.---.-.----|  |--.-----.----.
 |.  1___|.      |.  1   |.  |______|.|   | |   _|  _  |  __|    <|  -__|   _|
@@ -16,11 +19,6 @@ console.log(`
             ------------SQL Employee Tracker By Chris Kurz------------      
 ==============================================================================                                                                 
 `);
-
-
-
-
-
 
 
 
@@ -39,7 +37,7 @@ console.log(`
     answer = answer.split(' ').join('');
 
     //run selected fucntion
-     await runFunction[answer]();
+      await runFunction[answer]();
 
     app();
 };
