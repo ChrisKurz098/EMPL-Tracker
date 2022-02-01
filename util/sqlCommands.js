@@ -68,7 +68,7 @@ const sqlCommand = {
         `);
     },
     async showDepartmentsByBudget() {
-        return makeTable(`SELECT department.name AS department, SUM(role.salary) OVER (PARTITION BY department_id) AS budget
+        return makeTable(`SELECT department.name AS department, SUM(salary)  AS budget
         FROM role
         LEFT JOIN department ON role.department_id = department.id
         GROUP BY department_id ORDER BY budget DESC
@@ -97,6 +97,7 @@ function makeTable(sql) {
 const sqlData = {
     async makeArray(sql,key) {
         let dataArray = [];
+
        await DB.promise().query(sql)
         .then(([rows, feilds]) => {
             dataArray = rows.map(e => e[key]);
