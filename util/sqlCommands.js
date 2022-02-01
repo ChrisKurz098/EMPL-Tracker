@@ -56,7 +56,7 @@ const sqlCommand = {
         FROM employee
         LEFT JOIN role ON employee.role_id = role.id
         LEFT JOIN department ON role.department_id = department.id
-        ORDER BY department, manager_id
+        ORDER BY manager_id, department
         `);
     },
     async showEmployeesByDepartment(){
