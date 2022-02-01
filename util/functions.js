@@ -22,6 +22,7 @@ const runFunction = {
             .then(async ({ newDepName }) => {
                 if (newDepName !== '') {
                     await sqlCommand.addDepartment(newDepName);
+                    console.clear();
                     console.log(`\n${newDepName} added to department list \n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -40,6 +41,7 @@ const runFunction = {
                 let depID = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${depName}'`, 'id');
                 if (newTitle !== '') {
                     await sqlCommand.addRole(newTitle, newSalary, depID);
+                    console.clear();
                     console.log(`\n${newTitle} added to roles list\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -60,6 +62,7 @@ const runFunction = {
 
                 if (first !== '') {
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
+                    console.clear();
                     console.log(`\n${first} ${last} added to employee list\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -68,7 +71,25 @@ const runFunction = {
     },
     /////
     async updateAnEmployeeRole() {
-        console.log('7');
+        let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
+        let employees = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        employees.push('CANCLE');
+        roles.push('CANCLE');
+        await userPrompts.updateEmployeeRole(employees, roles )
+            .then(async ({ employee, newRole}) => {
+                
+                let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${newRole}'`, 'id');
+                let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee}'`, 'id');
+                
+
+                if (employee !== 'CANCLE' && newRole !== 'CANCLE') {
+                    await sqlCommand.updateEmployeeRole(employeeId, roleId);
+                    console.clear();
+                    console.log(`\n${employee}'s role changed to ${newRole}\n`);
+                } else {
+                    console.log(`\ncanceled\n`);
+                }
+            });
     },
     /////
     async updateEmployeeManager() {

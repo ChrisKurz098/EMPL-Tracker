@@ -31,7 +31,6 @@ const sqlCommand = {
         ('${newTitle}','${newSalary}', '${depID}')`);
     },
     async addEmployee(first, last, role, manager) {
-        console.log(manager);
         if (!manager[0]){
             return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
             VALUES
@@ -43,8 +42,8 @@ const sqlCommand = {
         };
         
     },
-    updateEmployeeManager(emplID, mangID) {
-        makeTable(`UPDATE employee SET manager_id = '${mangID}' WHERE id = '${emplID}'`)
+    async updateEmployeeRole(emplID, roleID) {
+       return makeTable(`UPDATE employee SET role_id = '${roleID}' WHERE id = '${emplID}'`)
     },
    
 };

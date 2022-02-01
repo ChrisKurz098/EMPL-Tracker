@@ -8,7 +8,8 @@ module.exports = {
             type: 'list',
             name: 'answer',
             message: 'Please Select an Option: ',
-            pageSize: '8',
+            pageSize: '7',
+            loop: false,
             choices: [new inquirer.Separator('===========MAIN MENU==========='),
             new inquirer.Separator('-------------------------------'),
             new inquirer.Separator('         -Veiw Tables-'),
@@ -110,6 +111,26 @@ module.exports = {
                 choices: managers,
                 when: (answers) => {
                     if (answers.first === '') { return false } else { return true }
+                }
+            }
+        ]);
+    },
+    async updateEmployeeRole(employees,roles){
+     return inquirer
+        .prompt([
+            {
+                type: 'list',
+                name: 'employee',
+                message: 'Select the employee to change roles',
+                choices: employees
+            },
+            {
+                type: 'list',
+                name: 'newRole',
+                message: 'Please select a new role:',
+                choices: roles,
+                when: (answers) => {
+                    if (answers.employee === 'CANCLE') { return false } else { return true }
                 }
             }
         ]);
