@@ -79,12 +79,22 @@ module.exports = {
             {
                 type: 'input',
                 name: 'first',
-                message: "Enter employees first name (leave blank to cancle): "
+                message: "Enter employees first name (leave blank to cancle): ",
+                validate: (answer) => {if (answer.split(" ")[1])  {       ///checks if there are any spaces
+                    console.log('\nOnly one name can be entered. No spaces please.');
+                    return false
+                } else {
+                    return true}}
             },
             {
                 type: 'input',
                 name: 'last',
                 message: "Enter employees last name: ",
+                validate: (answer) => {if (answer.split(" ")[1]) { ///checks if there are any spaces
+                    console.log('\nOnly one name can be entered. No spaces please.');
+                    return false
+                } else {
+                    return true}},
                 when: (answers) => {
                     if (answers.first === '') { return false } else { return true }
                 }
