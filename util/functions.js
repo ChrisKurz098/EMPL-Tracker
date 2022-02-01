@@ -75,10 +75,9 @@ const runFunction = {
         await sqlCommand.showEmployees();
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
         
-        let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
-        let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
+ 
         //get the array of combined first and last bnames
-        let employees = mergeFirstLastArray(first,last);
+        let employees = await getFirstLastArray();
         
         employees.push('CANCLE');
         roles.push('CANCLE');
@@ -86,12 +85,12 @@ const runFunction = {
             .then(async ({ employee, newRole }) => {
 
                 employee = employee.split(' ');
-                console.log(employee);
+            
                 let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${newRole}'`, 'id');
                 let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
-                if (employee !== 'CANCLE' && newRole !== 'CANCLE') {
+                if (employee[0] !== 'CANCLE' && newRole[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeRole(employeeId, roleId);
                     console.clear();
                     console.log(`\n${employee[0]} ${employee[1]}'s role changed to ${newRole}\n`);
@@ -104,23 +103,24 @@ const runFunction = {
     async updateEmployeeManager() {
         await sqlCommand.showEmployeesByManager();
 
-        let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
-        let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
         //get the array of combined first and last bnames
-        let employees = mergeFirstLastArray(first,last);
-        // managerNames.push('CANCLE');
+        let employees = await getFirstLastArray();
+        
         employees.push('CANCLE');
         await userPrompts.updateEmployeeManager(employees, employees)
             .then(async ({ employee, newManager }) => {
 
+                console.log('new manager:', newManager);
+                
                 employee = employee.split(' ');
-                newManager = newManager.split(' ');
+                //if you cancled at employee name, manager will be undefined. Check for this ...
+                (!employee[1]) ? newManager = newManager.split(' ') : newManager = 'CANCLE';
 
                 let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager[0]}' AND last_name = '${newManager[1]}'`, 'id');
                 let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
-                if (employee !== 'CANCLE' && newManager !== 'CANCLE') {
+                if (employee[0] !== 'CANCLE' && newManager[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
                     console.clear();
                     console.log(`\n${employee[0]} ${employee[0]}'s manager changed to ${newManager[0]} ${newManager[1]}\n`);
@@ -181,8 +181,9 @@ const runFunction = {
 };
 
 //this will take an array of first names and array of last names (in order) and merge the names together
-function mergeFirstLastArray(first,last){
-
+async function getFirstLastArray(){
+    let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+    let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
     for (let i = 0; i < first.length; i++) {
         const e = last[i];
         first[i] += ' ' + e;
