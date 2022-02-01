@@ -149,9 +149,10 @@ const runFunction = {
         await userPrompts.deleteCatagoryType(deps, roles, employees)
 
             .then(async ({catagory,delDep,delRole,delEmpl,check }) => {
-                
-                if (delDep !== 'CANCLE' && delRole !== 'CANCLE' && delEmpl !== 'CANCLE' && check !== 'NO' && catagory !== 'None') {
-                    if (delDep !== 'CANCLE') {
+              
+                if (delDep, delRole,delEmpl !== 'CANCLE' && check == 'YES' && catagory !== 'None') {
+
+                    if (delDep !== undefined ) {
                         let depId = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${delDep}'`, 'id');
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE department_id = '${depId}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
@@ -160,13 +161,13 @@ const runFunction = {
                         console.log(`\n The department ${delDep} has been deleted!\n`)
                        
                     }
-                    if (delRole !== 'CANCLE') {
+                    if (delRole !== undefined) {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${delRole}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
                         console.clear();
                         console.log(`\n The role ${delRole} has been deleted!\n`)
                     }
-                    if (delEmpl !== 'CANCLE') {
+                    if (delEmpl !== undefined) {
                         //split first and last name
                         const splitName = delEmpl.split(' ');
                         
