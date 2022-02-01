@@ -140,13 +140,14 @@ const runFunction = {
     async deleteCatagoryType() {
         let deps = await sqlData.makeArray(`SELECT name FROM department`, 'name');
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
-        let employees = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        let employees = await getFirstLastArray();
         deps.push('CANCLE');
         roles.push('CANCLE');
         employees.push('CANCLE');
         console.log('All Departments: ', deps);
         await sqlCommand.showEmployeesByDepartment();
         await userPrompts.deleteCatagoryType(deps, roles, employees)
+
             .then(async ({catagory,delDep,delRole,delEmpl,check }) => {
                 
                 if (delDep !== 'CANCLE' && delRole !== 'CANCLE' && delEmpl !== 'CANCLE' && check !== 'NO' && catagory !== 'None') {
@@ -156,17 +157,24 @@ const runFunction = {
                         await sqlCommand.deleteCatagory('role', roleId);
                         await sqlCommand.deleteCatagory('department', depId);
                         console.clear();
+                        console.log(`\n The department ${delDep} has been deleted!\n`)
                        
                     }
                     if (delRole !== 'CANCLE') {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${delRole}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
                         console.clear();
+                        console.log(`\n The role ${delRole} has been deleted!\n`)
                     }
                     if (delEmpl !== 'CANCLE') {
-                        let emplID = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${delEmpl}'`, 'id');
+                        //split first and last name
+                        const splitName = delEmpl.split(' ');
+                        
+                        let emplID = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${splitName[0]}' AND last_name = '${splitName[1]}'`, 'id');
+                        console.log(emplID);
                         await sqlCommand.deleteCatagory('employee', emplID);
-                        console.clear();
+                         console.clear();
+                         console.log(`\nThe employee ${delEmpl} has been deleted!\n`)
                     }
                 } else {
                     console.log('\ncancled\n');

@@ -176,8 +176,8 @@ module.exports = {
                },
                {
                 type: 'list',
-                name: 'delDep',
-                message: 'Select a employee to delete',
+                name: 'delEmpl',
+                message: 'Select an employee to delete',
                 choices: employees,
                 when: (answers) => answers.catagory === 'Employee'
                },
@@ -186,7 +186,7 @@ module.exports = {
                 name: 'check',
                 message: 'WARNING: Are you sure? This will delete this entry forever!!!',
                 choices: ['YES', 'NO'],
-                when: (answers) => answers.catagory !== 'None'
+                when: (answers) => {if (answers.catagory !== 'None' && answers.delDep !=='CANCLE' && answers.delRole !=='CANCLE' && answers.delEmpl !=='CANCLE')  {return true} }
                }
            ])
         }
