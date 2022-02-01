@@ -1,5 +1,6 @@
 
 const userPrompts = require('../util/prompts');
+
 const { sqlCommand, sqlData } = require('./sqlCommands');
 
 
@@ -73,20 +74,27 @@ const runFunction = {
     async updateAnEmployeeRole() {
         await sqlCommand.showEmployees();
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
-        let employees = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        
+        let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
+        //get the array of combined first and last bnames
+        let employees = mergeFirstLastArray(first,last);
+        
         employees.push('CANCLE');
         roles.push('CANCLE');
         await userPrompts.updateEmployeeRole(employees, roles)
             .then(async ({ employee, newRole }) => {
 
+                employee = employee.split(' ');
+                console.log(employee);
                 let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${newRole}'`, 'id');
-                let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee}'`, 'id');
+                let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
                 if (employee !== 'CANCLE' && newRole !== 'CANCLE') {
                     await sqlCommand.updateEmployeeRole(employeeId, roleId);
                     console.clear();
-                    console.log(`\n${employee}'s role changed to ${newRole}\n`);
+                    console.log(`\n${employee[0]} ${employee[1]}'s role changed to ${newRole}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
@@ -95,28 +103,20 @@ const runFunction = {
     /////
     async updateEmployeeManager() {
         await sqlCommand.showEmployees();
-        // let manIDs = await sqlData.makeArray(`SELECT manager_id FROM employee GROUP BY manager_id`, 'manager_id');
-        // //remove null values
-        // manIDs.shift();
-        // //convert array into useable string for SQL query
 
-        // let managerIdString = ``;
-        // manIDs.forEach((e, i) => {
-        //     managerIdString += `id = ${e} `;
-        //     (i < manIDs.length - 1) ? managerIdString += `OR ` : managerIdString += ` `;
-        // });
-
-        
-        // let managerNames = await sqlData.makeArray(`SELECT first_name FROM employee WHERE ${managerIdString}`, 'first_name')
-
-        let employees = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
+        //get the array of combined first and last bnames
+        let employees = mergeFirstLastArray(first,last);
         // managerNames.push('CANCLE');
         employees.push('CANCLE');
         await userPrompts.updateEmployeeManager(employees, employees)
             .then(async ({ employee, newManager }) => {
 
+                employee = employee.split(' ');
+
                 let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager}'`, 'id');
-                let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee}'`, 'id');
+                let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
                 if (employee !== 'CANCLE' && newManager !== 'CANCLE') {
@@ -179,6 +179,15 @@ const runFunction = {
     }
 };
 
+//this will take an array of first names and array of last names (in order) and merge the names together
+function mergeFirstLastArray(first,last){
+
+    for (let i = 0; i < first.length; i++) {
+        const e = last[i];
+        first[i] += ' ' + e;
+    }
+    return first;
+}
 
 
 
