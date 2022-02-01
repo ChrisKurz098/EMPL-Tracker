@@ -102,7 +102,7 @@ const runFunction = {
     },
     /////
     async updateEmployeeManager() {
-        await sqlCommand.showEmployees();
+        await sqlCommand.showEmployeesByManager();
 
         let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
         let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
@@ -114,15 +114,16 @@ const runFunction = {
             .then(async ({ employee, newManager }) => {
 
                 employee = employee.split(' ');
+                newManager = newManager.split(' ');
 
-                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager}'`, 'id');
+                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager[0]}' AND last_name = '${newManager[1]}'`, 'id');
                 let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
                 if (employee !== 'CANCLE' && newManager !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
                     console.clear();
-                    console.log(`\n${employee}'s manager changed to ${managerId}\n`);
+                    console.log(`\n${employee[0]} ${employee[0]}'s manager changed to ${newManager[0]} ${newManager[1]}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
