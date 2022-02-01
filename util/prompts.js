@@ -1,5 +1,6 @@
 
 const inquirer = require('inquirer');
+const { sqlData } = require('./sqlCommands');
 
 module.exports = {
     async mainPrompt() {
@@ -49,7 +50,10 @@ module.exports = {
             message: "Enter the name of the new Department (leave blank to cancle): "
         }]);
     },
-    async addRole() {
+    async addRole(list) {
+
+
+        await console.log('Departments: ', list);
         return inquirer.prompt([
             {
                 type: 'input',
@@ -66,16 +70,16 @@ module.exports = {
             },
             {
                 type: 'list',
-                name: 'depID',
+                name: 'depName',
                 message: "Select the associated department: ",
-                choices: ['1', '2', '3', '4', '5', '6', '7'],
+                choices: list,
                 when: (answers) => {
                     if (answers.newTitle === '') { return false } else { return true }
                 }
             }
         ]);
     },
-    async addEmployee() {
+    async addEmployee(roles,managers) {
         return inquirer.prompt([
             {
                 type: 'input',
@@ -93,8 +97,8 @@ module.exports = {
             {
                 type: 'list',
                 name: 'role',
-                message: "Enter employees role ID: ",
-                choices: ['1', '2', '3', '4', '5', '6', '7'],
+                message: "Select employee role: ",
+                choices: roles,
                 when: (answers) => {
                     if (answers.first === '') { return false } else { return true }
                 }
@@ -102,8 +106,8 @@ module.exports = {
             {
                 type: 'list',
                 name: 'manager',
-                message: "Enter employees manager ID: ",
-                choices: ['1', '2', '3', '4', '5', '6', '7'],
+                message: "Select employees manager: ",
+                choices: managers,
                 when: (answers) => {
                     if (answers.first === '') { return false } else { return true }
                 }

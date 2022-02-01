@@ -1,6 +1,6 @@
 const DB = require('../db/connection');
 
-
+//commands for drawing SQL tables
 const sqlCommand = {
     async showDepartments() {
 
@@ -31,16 +31,25 @@ const sqlCommand = {
         ('${newTitle}','${newSalary}', '${depID}')`);
     },
     async addEmployee(first, last, role, manager) {
-        return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
-        VALUES
-        ('${first}','${last}','${role}','${manager}')`);
+        console.log(manager);
+        if (!manager[0]){
+            return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
+            VALUES
+            ('${first}','${last}','${role}',NULL)`);
+        } else {
+            return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
+            VALUES
+            ('${first}','${last}','${role}','${manager}')`);
+        };
+        
     },
     updateEmployeeManager(emplID, mangID) {
         makeTable(`UPDATE employee SET manager_id = '${mangID}' WHERE id = '${emplID}'`)
-    }
+    },
+   
 };
 
-
+//function to draw SQL tables in console
 function makeTable(sql) {
 
     return DB.promise().query(sql)
@@ -50,5 +59,21 @@ function makeTable(sql) {
 
 };
 
+//functions to convert data from SQL database into arrays for inquirer prompts
+const sqlData = {
+    async makeArray(sql,key) {
+        let dataArray = [];
+       await DB.promise().query(sql)
+        .then(([rows, feilds]) => {
+            dataArray = rows.map(e => e[key]);
+        }).catch(console.log);
+        return dataArray;
+    }    
+}
 
-module.exports = sqlCommand;
+
+
+module.exports = {
+    sqlCommand,
+    sqlData
+}

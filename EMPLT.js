@@ -37,7 +37,7 @@ Welcom to:
     answer = answer.split(' ').join('');
 
     //run selected fucntion
-      await runFunction[answer]();
+      await runFunction[answer]() ;
 
     app();
 };

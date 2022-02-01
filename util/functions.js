@@ -1,6 +1,6 @@
 
 const userPrompts = require('../util/prompts');
-const sqlCommand = require('./sqlCommands');
+const { sqlCommand, sqlData } = require('./sqlCommands');
 
 
 
@@ -21,7 +21,7 @@ const runFunction = {
         await userPrompts.addDepartment()
             .then(async ({ newDepName }) => {
                 if (newDepName !== '') {
-                   await sqlCommand.addDepartment(newDepName);
+                    await sqlCommand.addDepartment(newDepName);
                     console.log(`\n${newDepName} added to department list \n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -31,8 +31,13 @@ const runFunction = {
     },
     /////
     async addARole() {
-        await userPrompts.addRole()
-            .then(async ({ newTitle, newSalary, depID }) => {
+        let list = await sqlData.makeArray(`SELECT name FROM department`, 'name')
+
+
+        await userPrompts.addRole(list)
+            .then(async ({ newTitle, newSalary, depName }) => {
+
+                let depID = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${depName}'`, 'id');
                 if (newTitle !== '') {
                     await sqlCommand.addRole(newTitle, newSalary, depID);
                     console.log(`\n${newTitle} added to roles list\n`);
@@ -43,10 +48,18 @@ const runFunction = {
     },
     /////
     async addAnEmployee() {
-        await userPrompts.addEmployee()
+        let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
+        let managers = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        managers.push('None');
+        await userPrompts.addEmployee(roles, managers)
             .then(async ({ first, last, role, manager }) => {
+
+                let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
+                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${manager}'`, 'id');
+                
+
                 if (first !== '') {
-                   await sqlCommand.addEmployee(first, last, role, manager);
+                    await sqlCommand.addEmployee(first, last, roleId, managerId);
                     console.log(`\n${first} ${last} added to employee list\n`);
                 } else {
                     console.log(`\ncanceled\n`);
