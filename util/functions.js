@@ -93,23 +93,23 @@ const runFunction = {
     },
     /////
     async updateEmployeeManager() {
-        console.log('Updating Manager not yet implemented');
+        console.log('\nUpdating Manager not yet implemented\n');
     },
     /////
     async viewEmployeesByManager() {
-        console.log('View by manager not yet implemented');
+        console.log('\nView by manager not yet implemented\n');
     },
     /////
     async veiwEmployeesByDepartment() {
-        console.log('View by department not yet implemented');
+        console.log('\nView by department not yet implemented\n');
     },
     /////
     async deleteCatagoryType() {
-        console.log('Removing departments not yet implemented');
+        console.log('\nRemoving departments not yet implemented\n');
     },
     /////
     async viewDepartmentBudget() {
-        console.log('View y budget not yet implemented');
+        console.log('\nView y budget not yet implemented\n');
     }
 };
 
