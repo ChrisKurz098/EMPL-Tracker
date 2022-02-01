@@ -17,6 +17,9 @@ module.exports = {
                 'View All Departments',
                 'View All Roles',
                 'View All Employees',
+                'View Employees By Manager',
+                'Veiw Employees By Department',
+                'View Department Budgets',
             new inquirer.Separator('-------------------------------'),
             new inquirer.Separator('           -Add Data-'),
             new inquirer.Separator('-------------------------------'),
@@ -28,16 +31,7 @@ module.exports = {
             new inquirer.Separator('-------------------------------'),
                 'Update An Employee Role',
                 'Update Employee Manager',
-            new inquirer.Separator('-------------------------------'),
-            new inquirer.Separator('     -Veiw Ordered Tables-'),
-            new inquirer.Separator('-------------------------------'),
-                'View Employees By Manager',
-                'Veiw Employees By Department',
-            new inquirer.Separator('-------------------------------'),
-            new inquirer.Separator('        -Misc Functions-'),
-            new inquirer.Separator('-------------------------------'),
                 'Delete Catagory Type',
-                'View Department Budget',
             new inquirer.Separator('-------------------------------'),
                 'Quit',
             new inquirer.Separator('-------------------------------'),]
@@ -134,5 +128,66 @@ module.exports = {
                 }
             }
         ]);
-    }
+    },
+    async updateEmployeeManager(employees,managers){
+        return inquirer
+           .prompt([
+               {
+                   type: 'list',
+                   name: 'employee',
+                   message: 'Select the employee to change manager',
+                   loop: false,
+                   choices: employees
+               },
+               {
+                   type: 'list',
+                   name: 'newManager',
+                   message: 'Please select a new manager:',
+                   loop: false,
+                   choices: managers,
+                   when: (answers) => {
+                       if (answers.employee === 'CANCLE') { return false } else { return true }
+                   }
+               }
+           ]);
+       },
+    async deleteCatagoryType(deps,roles,employees){
+        return inquirer
+           .prompt([
+               {
+                   type: 'list',
+                   name: 'catagory',
+                   message: 'What type of catagory do you wnat to delete?',
+                   choices: ['Department', 'Role', 'Employee', 'None']
+               },
+               {
+                type: 'list',
+                name: 'delDep',
+                message: 'Select a department to delete',
+                choices: deps,
+                when: (answers) => answers.catagory === 'Department',
+               },
+               {
+                type: 'list',
+                name: 'delRole',
+                message: 'Select a role to delete',
+                choices: roles,
+                when: (answers) => answers.catagory === 'Role'
+               },
+               {
+                type: 'list',
+                name: 'delDep',
+                message: 'Select a employee to delete',
+                choices: employees,
+                when: (answers) => answers.catagory === 'Employee'
+               },
+               {
+                type: 'list',
+                name: 'check',
+                message: 'WARNING: Are you sure? This will delete this entry forever!!!',
+                choices: ['YES', 'NO'],
+                when: (answers) => answers.catagory !== 'None'
+               }
+           ])
+        }
 }
