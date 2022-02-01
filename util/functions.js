@@ -109,12 +109,11 @@ const runFunction = {
         employees.push('CANCLE');
         await userPrompts.updateEmployeeManager(employees, employees)
             .then(async ({ employee, newManager }) => {
-
-                console.log('new manager:', newManager);
                 
                 employee = employee.split(' ');
-                //if you cancled at employee name, manager will be undefined. Check for this ...
-                (!employee[1]) ? newManager = newManager.split(' ') : newManager = 'CANCLE';
+                //if you cancled at employee name, manager will be undefined.
+                //if employee returns a last name, then newManager selection was made and therefore is not undefined and can be split
+                (employee[1]) ? newManager = newManager.split(' ') : newManager = 'CANCLE';
 
                 let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager[0]}' AND last_name = '${newManager[1]}'`, 'id');
                 let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
