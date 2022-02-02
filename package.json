@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ChrisKurz098/EMPL-Tracker#readme",
   "dependencies": {
+    "dotenv": "^15.0.0",
     "inquirer": "^8.2.0",
     "mysql2": "^2.3.3"
   }

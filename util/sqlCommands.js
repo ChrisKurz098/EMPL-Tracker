@@ -52,6 +52,7 @@ const sqlCommand = {
         return makeTable(`UPDATE employee SET manager_id = '${managerID}' WHERE id = '${emplID}'`)
      },
     async showEmployeesByManager(){
+        
         return makeTable(`SELECT employee.id, employee.first_name, employee.last_name, employee.manager_id, role.title AS role, department.name AS department
         FROM employee
         LEFT JOIN role ON employee.role_id = role.id
