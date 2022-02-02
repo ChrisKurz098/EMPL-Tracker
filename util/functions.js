@@ -52,19 +52,21 @@ const runFunction = {
     /////
     async addAnEmployee() {
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
-        let managers = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
+        let managers = await getFirstLastArray();
         managers.push('None');
         await userPrompts.addEmployee(roles, managers)
             .then(async ({ first, last, role, manager }) => {
-
+               const managerNameArray =  manager.split(" ");
                 let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
-                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${manager}'`, 'id');
+                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[0]}' AND last_name = '${managerNameArray[1]}'`, 'id');
 
 
                 if (first !== '') {
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
-                    console.clear();
+
+                    //console.clear();
                     console.log(`\n${first} ${last} added to employee list\n`);
+                    console.log(managerNameArray);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
