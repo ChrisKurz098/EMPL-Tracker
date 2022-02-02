@@ -54,7 +54,7 @@ const sqlCommand = {
     },
     async showEmployeesByManager() {
 
-        return makeTable(`SELECT e.id, e.first_name, e.last_name, role.title AS role, department.name AS department, m.first_name AS manager
+        return makeTable(`SELECT  e.first_name, e.last_name, department.name AS department, role.title AS role,  m.first_name AS manager
         FROM employee e
         LEFT JOIN role ON e.role_id = role.id
         LEFT JOIN department ON role.department_id = department.id
