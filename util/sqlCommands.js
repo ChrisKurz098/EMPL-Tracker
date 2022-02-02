@@ -50,7 +50,11 @@ const sqlCommand = {
         return makeTable(`UPDATE employee SET role_id = '${roleID}' WHERE id = '${emplID}'`)
     },
     async updateEmployeeManager(emplID, managerID) {
+        if (manager_id = 'NULL'){
+            return makeTable(`UPDATE employee SET manager_id = NULL WHERE id = '${emplID}'`)
+        } else {
         return makeTable(`UPDATE employee SET manager_id = '${managerID}' WHERE id = '${emplID}'`)
+        }
     },
     async showEmployeesByManager() {
 

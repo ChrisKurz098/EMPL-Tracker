@@ -107,7 +107,7 @@ const runFunction = {
 
         //get the array of combined first and last bnames
         let employees = await getFirstLastArray();
-        
+        employees.push('None');
         employees.push('CANCLE');
         await userPrompts.updateEmployeeManager(employees, employees)
             .then(async ({ employee, newManager }) => {
@@ -117,14 +117,20 @@ const runFunction = {
                 //if employee returns a last name, then newManager selection was made and therefore is not undefined and can be split
                 (employee[1]) ? newManager = newManager.split(' ') : newManager = 'CANCLE';
 
+
                 let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${newManager[0]}' AND last_name = '${newManager[1]}'`, 'id');
+
+                if (newManager[0] === 'None'){
+                managerId = 'NULL';
+                } 
+                   
                 let employeeId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${employee[0]}' AND last_name = '${employee[1]}'`, 'id');
 
 
                 if (employee[0] !== 'CANCLE' && newManager[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
                     console.clear();
-                    console.log(`\n${employee[0]} ${employee[0]}'s manager changed to ${newManager[0]} ${newManager[1]}\n`);
+                    console.log(`\n${employee[0]} ${employee[1]}'s manager changed to ${newManager[0]} ${newManager[1]}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
