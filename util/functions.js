@@ -23,7 +23,7 @@ const runFunction = {
             .then(async ({ newDepName }) => {
                 if (newDepName !== '') {
                     await sqlCommand.addDepartment(newDepName);
-                    console.clear();
+            
                     console.log(`\n${newDepName} added to department list \n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -43,7 +43,7 @@ const runFunction = {
                 let depID = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${depName}'`, 'id');
                 if (newTitle !== '') {
                     await sqlCommand.addRole(newTitle, newSalary, depID);
-                    console.clear();
+            
                     console.log(`\n${newTitle} added to roles list\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -66,9 +66,9 @@ const runFunction = {
                     let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[1]}' AND last_name = '${managerNameArray[0]}'`, 'id');
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
 
-                    //console.clear();
+                    
                     console.log(`\n${first} ${last} added to employee list\n`);
-                    console.log(managerNameArray);
+                    
                 } else {
                     console.log(`\ncanceled\n`);
                 }
@@ -97,7 +97,7 @@ const runFunction = {
 
                 if (employee[0] !== 'CANCLE' && newRole[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeRole(employeeId, roleId);
-                    console.clear();
+            
                     console.log(`\n${employee[0]} ${employee[1]}'s role changed to ${newRole}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -140,7 +140,7 @@ const runFunction = {
 
                 if (employee[0] !== 'CANCLE' && newManager[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
-                    console.clear();
+            
                     console.log(`\n${employee[0]} ${employee[1]}'s manager changed to ${newManager[1]} ${newManager[2]}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -175,14 +175,14 @@ const runFunction = {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE department_id = '${depId}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
                         await sqlCommand.deleteCatagory('department', depId);
-                        console.clear();
+                
                         console.log(`\n The department ${delDep} has been deleted!\n`)
 
                     }
                     if (delRole !== undefined) {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${delRole}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
-                        console.clear();
+                
                         console.log(`\n The role ${delRole} has been deleted!\n`)
                     }
                     if (delEmpl !== undefined) {
@@ -191,9 +191,9 @@ const runFunction = {
                         splitName[0]=splitName[0].replace(',','');
 
                         let emplID = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${splitName[1]}' AND last_name = '${splitName[0]}'`, 'id');
-                        console.log(emplID);
+                        
                         await sqlCommand.deleteCatagory('employee', emplID);
-                        //console.clear();
+                        
                         console.log(`\nThe employee ${delEmpl} has been deleted!\n`)
                     }
                 } else {

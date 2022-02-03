@@ -27,33 +27,33 @@ const sqlCommand = {
     async addDepartment(newDep) {
         return makeTable(`INSERT INTO department (name)
         VALUES
-        ('${newDep}')`);
+        ('${newDep}')`,false);
     },
     async addRole(newTitle, newSalary, depID) {
         return makeTable(`INSERT INTO role (title, salary, department_id)
         VALUES
-        ('${newTitle}','${newSalary}', '${depID}')`);
+        ('${newTitle}','${newSalary}', '${depID}')`,false);
     },
     async addEmployee(first, last, role, manager) {
         if (!manager[0]) {
             return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
             VALUES
-            ('${first}','${last}','${role}',NULL)`);
+            ('${first}','${last}','${role}',NULL)`,false);
         } else {
             return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
             VALUES
-            ('${first}','${last}','${role}','${manager}')`);
+            ('${first}','${last}','${role}','${manager}')`,false);
         };
 
     },
     async updateEmployeeRole(emplID, roleID) {
-        return makeTable(`UPDATE employee SET role_id = '${roleID}' WHERE id = '${emplID}'`)
+        return makeTable(`UPDATE employee SET role_id = '${roleID}' WHERE id = '${emplID}'`,false)
     },
     async updateEmployeeManager(emplID, managerID) {
         if (managerID === 'NULL'){
-            return makeTable(`UPDATE employee SET manager_id = NULL WHERE id = '${emplID}'`)
+            return makeTable(`UPDATE employee SET manager_id = NULL WHERE id = '${emplID}'`,false)
         } else {
-        return makeTable(`UPDATE employee SET manager_id = '${managerID}' WHERE id = '${emplID}'`)
+        return makeTable(`UPDATE employee SET manager_id = '${managerID}' WHERE id = '${emplID}'`,false)
         }
     },
     async showEmployeesByManager() {
@@ -85,17 +85,18 @@ const sqlCommand = {
     },
     async deleteCatagory(table, id) {
 
-        await makeTable(`DELETE FROM ${table} WHERE id = '${id}'`);
+        await makeTable(`DELETE FROM ${table} WHERE id = '${id}'`,false);
     }
 
 };
 
 //function to draw SQL tables in console
-function makeTable(sql,) {
+function makeTable(sql, printIt = true) {
 
     return DB.promise().query(sql)
         .then(([rows, feilds]) => {
-            console.table(rows);
+
+            if (printIt) console.table(rows);
         }).catch(console.log);
 
 };
