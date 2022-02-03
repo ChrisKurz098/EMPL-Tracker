@@ -4,7 +4,6 @@ const userPrompts = require('../util/prompts');
 const { sqlCommand, sqlData } = require('./sqlCommands');
 
 
-
 const runFunction = {
     async viewAllDepartments() {
         await sqlCommand.showDepartments()
@@ -19,6 +18,7 @@ const runFunction = {
     },
     /////
     async addADepartment() {
+        await sqlCommand.showDepartments()
         await userPrompts.addDepartment()
             .then(async ({ newDepName }) => {
                 if (newDepName !== '') {
@@ -33,6 +33,7 @@ const runFunction = {
     },
     /////
     async addARole() {
+        await sqlCommand.showRoles();
         let list = await sqlData.makeArray(`SELECT name FROM department`, 'name')
 
 
@@ -51,6 +52,7 @@ const runFunction = {
     },
     /////
     async addAnEmployee() {
+        await sqlCommand.showEmployeesByManager()
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
         let managers = await getFirstLastArray();
         managers.push('None');
@@ -151,7 +153,6 @@ const runFunction = {
         deps.push('CANCLE');
         roles.push('CANCLE');
         employees.push('CANCLE');
-        console.log('All Departments: ', deps);
         await sqlCommand.showEmployeesByDepartment();
         await userPrompts.deleteCatagoryType(deps, roles, employees)
 
@@ -200,8 +201,7 @@ async function getFirstLastArray(){
     let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
     let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
     for (let i = 0; i < first.length; i++) {
-        const e = last[i];
-        first[i] += ' ' + e;
+        first[i] += ' ' + last[i];
     }
     return first;
 }

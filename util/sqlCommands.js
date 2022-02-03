@@ -91,7 +91,7 @@ const sqlCommand = {
 };
 
 //function to draw SQL tables in console
-function makeTable(sql) {
+function makeTable(sql,) {
 
     return DB.promise().query(sql)
         .then(([rows, feilds]) => {
