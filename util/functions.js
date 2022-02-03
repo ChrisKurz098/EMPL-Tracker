@@ -56,12 +56,11 @@ const runFunction = {
         managers.push('None');
         await userPrompts.addEmployee(roles, managers)
             .then(async ({ first, last, role, manager }) => {
-               const managerNameArray =  manager.split(" ");
-                let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
-                let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[0]}' AND last_name = '${managerNameArray[1]}'`, 'id');
-
 
                 if (first !== '') {
+                    const managerNameArray =  manager.split(" ");
+                    let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
+                    let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[0]}' AND last_name = '${managerNameArray[1]}'`, 'id');
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
 
                     //console.clear();
