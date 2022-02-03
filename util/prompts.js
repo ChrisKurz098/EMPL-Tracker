@@ -196,7 +196,14 @@ module.exports = {
                 name: 'check',
                 message: 'WARNING: Are you sure? This will delete this entry forever!!!',
                 choices: ['YES', 'NO'],
-                when: (answers) => {if (answers.catagory !== 'None' && answers.delDep !=='CANCLE' && answers.delRole !=='CANCLE' && answers.delEmpl !=='CANCLE')  {return true} }
+                when: (answers) => {if (answers.catagory !== 'Department' && answers.catagory !== 'None' && answers.delDep !=='CANCLE' && answers.delRole !=='CANCLE' && answers.delEmpl !=='CANCLE')  {return true} }
+               },
+               {
+                type: 'list',
+                name: 'check',
+                message: 'WARNING: Are you sure? This will delete this entry and the associated role(s) forever!!!',
+                choices: ['YES', 'NO'],
+                when: (answers) => {if (answers.catagory === 'Department' && answers.catagory !== 'None' && answers.delDep !=='CANCLE' && answers.delRole !=='CANCLE' && answers.delEmpl !=='CANCLE')  {return true} }
                }
            ])
         }
