@@ -201,9 +201,10 @@ async function getFirstLastArray(){
     let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
     let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
     for (let i = 0; i < first.length; i++) {
-        first[i] += ' ' + last[i];
+        last[i] += ', ' + first[i];
     }
-    return first;
+    last.sort()
+    return last;
 }
 
 
