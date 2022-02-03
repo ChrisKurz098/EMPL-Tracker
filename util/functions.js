@@ -17,13 +17,25 @@ const runFunction = {
         await sqlCommand.showEmployees();
     },
     /////
+    async viewEmployeesByManager() {
+        await sqlCommand.showEmployeesByManager()
+    },
+    /////
+    async veiwEmployeesByDepartment() {
+        await sqlCommand.showEmployeesByDepartment()
+    },
+    /////
+    async viewDepartmentBudgets() {
+        await sqlCommand.showDepartmentsByBudget()
+    },
+    /////
     async addADepartment() {
         await sqlCommand.showDepartments()
         await userPrompts.addDepartment()
             .then(async ({ newDepName }) => {
                 if (newDepName !== '') {
                     await sqlCommand.addDepartment(newDepName);
-            
+
                     console.log(`\n${newDepName} added to department list \n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -43,7 +55,7 @@ const runFunction = {
                 let depID = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${depName}'`, 'id');
                 if (newTitle !== '') {
                     await sqlCommand.addRole(newTitle, newSalary, depID);
-            
+
                     console.log(`\n${newTitle} added to roles list\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -61,14 +73,14 @@ const runFunction = {
 
                 if (first !== '') {
                     const managerNameArray = manager.split(" ");
-                    managerNameArray[0]= managerNameArray[0].replace(',', '');
+                    managerNameArray[0] = managerNameArray[0].replace(',', '');
                     let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
                     let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[1]}' AND last_name = '${managerNameArray[0]}'`, 'id');
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
 
-                    
+
                     console.log(`\n${first} ${last} added to employee list\n`);
-                    
+
                 } else {
                     console.log(`\ncanceled\n`);
                 }
@@ -97,7 +109,7 @@ const runFunction = {
 
                 if (employee[0] !== 'CANCLE' && newRole[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeRole(employeeId, roleId);
-            
+
                     console.log(`\n${employee[0]} ${employee[1]}'s role changed to ${newRole}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
@@ -140,20 +152,12 @@ const runFunction = {
 
                 if (employee[0] !== 'CANCLE' && newManager[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
-            
+
                     console.log(`\n${employee[0]} ${employee[1]}'s manager changed to ${newManager[1]} ${newManager[2]}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
             });
-    },
-    /////
-    async viewEmployeesByManager() {
-        await sqlCommand.showEmployeesByManager()
-    },
-    /////
-    async veiwEmployeesByDepartment() {
-        await sqlCommand.showEmployeesByDepartment()
     },
     /////
     async deleteCatagoryType() {
@@ -175,39 +179,36 @@ const runFunction = {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE department_id = '${depId}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
                         await sqlCommand.deleteCatagory('department', depId);
-                
+
                         console.log(`\n The department ${delDep} has been deleted!\n`)
 
                     }
                     if (delRole !== undefined) {
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${delRole}'`, 'id');
                         await sqlCommand.deleteCatagory('role', roleId);
-                
+
                         console.log(`\n The role ${delRole} has been deleted!\n`)
                     }
                     if (delEmpl !== undefined) {
                         //split first and last name
                         const splitName = delEmpl.split(' ');
-                        splitName[0]=splitName[0].replace(',','');
+                        splitName[0] = splitName[0].replace(',', '');
 
                         let emplID = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${splitName[1]}' AND last_name = '${splitName[0]}'`, 'id');
-                        
+
                         await sqlCommand.deleteCatagory('employee', emplID);
-                        
+
                         console.log(`\nThe employee ${delEmpl} has been deleted!\n`)
                     }
                 } else {
                     console.log('\ncancled\n');
                 }
             });
-    },
-    /////
-    async viewDepartmentBudgets() {
-        await sqlCommand.showDepartmentsByBudget()
     }
+
 };
 
-//this will take an array of first names and array of last names (in order) and merge the names together
+//this will take an array of first names and array of last names (in the same order) and merge the names together into a single array of first and last names
 async function getFirstLastArray() {
     let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
     let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
