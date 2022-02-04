@@ -6,7 +6,7 @@
 This is a command line app that uses a local SQL database to manage, store and update company employees, roles and departmnets. 
 
 ## Screenshots
-![screenshotA](screenshotA.PNG) ![screenshotB](screenshotB.PNG)
+![screenshotA](screenshotA.PNG)
 
 ## Table of Contents  
     
