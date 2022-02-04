@@ -1,7 +1,7 @@
 
 const inquirer = require('inquirer');
 
-
+//some propts have parameters where the user can pass arrays of choices
 module.exports = {
     async mainPrompt() {
         return inquirer.prompt([{

@@ -35,6 +35,7 @@ const sqlCommand = {
         ('${newTitle}','${newSalary}', '${depID}')`,false);
     },
     async addEmployee(first, last, role, manager) {
+        //if the manager id is undefined, run SQL code to make manager_id NULL for new employee
         if (!manager[0]) {
             return makeTable(`INSERT INTO employee (first_name, last_name,role_id,manager_id)
             VALUES
@@ -50,6 +51,7 @@ const sqlCommand = {
         return makeTable(`UPDATE employee SET role_id = '${roleID}' WHERE id = '${emplID}'`,false)
     },
     async updateEmployeeManager(emplID, managerID) {
+        //if manager id was set to 'NULL, run SQL code that makes manager_id NULL
         if (managerID === 'NULL'){
             return makeTable(`UPDATE employee SET manager_id = NULL WHERE id = '${emplID}'`,false)
         } else {
@@ -90,7 +92,10 @@ const sqlCommand = {
 
 };
 
-//function to draw SQL tables in console
+/*function to draw SQL tables in console. 
+printIt specifies if it should print the table. 
+This is used when a table is updated as opposed to being viewed 
+due to how SQL query will respond with updated table stats and not a table*/
 function makeTable(sql, printIt = true) {
 
     return DB.promise().query(sql)
@@ -101,7 +106,8 @@ function makeTable(sql, printIt = true) {
 
 };
 
-//functions to convert data from SQL database into arrays for inquirer prompts
+//functions to convert data from SQL database into an array for inquirer prompts
+//provide the sql syntax to get the data and the column name (retruned as a "key" in each row/object)
 const sqlData = {
     async makeArray(sql, key) {
         let dataArray = [];
