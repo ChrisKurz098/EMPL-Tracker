@@ -121,7 +121,7 @@ const runFunction = {
     /////
     async updateAnEmployeeRole() {
         //display table(s) that may be needed for this input
-        await sqlCommand.showEmployees();
+        await sqlCommand.showEmployees('last_name');
         //get an array of all roles
         let roles = await sqlData.makeArray(`SELECT title FROM role`, 'title');
 

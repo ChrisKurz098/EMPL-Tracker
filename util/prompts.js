@@ -3,6 +3,14 @@ const inquirer = require('inquirer');
 
 //some propts have parameters where the user can pass arrays of choices
 module.exports = {
+    async chooseTable() {
+       return inquirer.prompt([{
+            type: 'list',
+            name: 'type',
+            message: 'Please choos a table style: ',
+            choices: ['Solid Line','Dotted Line']
+        }])
+    },
     async mainPrompt() {
         return inquirer.prompt([{
             type: 'list',
