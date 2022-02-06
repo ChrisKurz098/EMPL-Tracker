@@ -218,7 +218,8 @@ const runFunction = {
                         //get ID's from names
                         let depId = await sqlData.makeArray(`SELECT id FROM department WHERE name = '${delDep}'`, 'id');
                         let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE department_id = '${depId}'`, 'id');
-                        await sqlCommand.deleteCatagory('role', roleId);
+                        //there can be multiple roles per department. This deletes each role from the depId
+                        roleId.forEach(async (e) => await sqlCommand.deleteCatagory('role', e));
                         await sqlCommand.deleteCatagory('department', depId);
 
                         console.log(`\n The department ${delDep} has been deleted!\n`)
