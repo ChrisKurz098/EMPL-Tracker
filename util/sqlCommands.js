@@ -18,7 +18,7 @@ const sqlCommand = {
 
     },
     async showEmployees(order) {
-        return makeTable(`SELECT e.id,  e.first_name, e.last_name, role.title AS role,m.last_name AS managers_last_name
+        return makeTable(`SELECT e.id,  e.last_name, e.first_name, role.title AS role,m.last_name AS managers_last_name
         FROM employee e
         LEFT JOIN role ON e.role_id = role.id
         LEFT JOIN employee m ON e.manager_id = m.id
@@ -62,7 +62,7 @@ const sqlCommand = {
     },
     async showEmployeesByManager() {
 
-        return makeTable(`SELECT  e.first_name, e.last_name, department.name AS department, role.title AS role, m.last_name AS managers_last_name
+        return makeTable(`SELECT  m.last_name AS managers_last_name, department.name AS department,  e.last_name,  e.first_name, role.title AS role
         FROM employee e
         LEFT JOIN role ON e.role_id = role.id
         LEFT JOIN department ON role.department_id = department.id
@@ -71,7 +71,7 @@ const sqlCommand = {
         `);
     },
     async showEmployeesByDepartment() {
-        return makeTable(`SELECT employee.first_name, employee.last_name, role.title AS role , department.name AS department
+        return makeTable(`SELECT department.name AS department,  employee.last_name, employee.first_name, role.title AS role 
         FROM employee
         LEFT JOIN role ON employee.role_id = role.id
         LEFT JOIN department ON role.department_id = department.id
