@@ -5,7 +5,8 @@ const DB = require('../db/connection');
 const sqlCommand = {
     async showDepartments() {
 
-        return makeTable(`SELECT * FROM department`);
+        return makeTable(`SELECT * FROM department
+        ORDER BY name`);
 
     },
     async showRoles() {
@@ -16,11 +17,12 @@ const sqlCommand = {
          `);
 
     },
-    async showEmployees() {
+    async showEmployees(order) {
         return makeTable(`SELECT e.id,  e.first_name, e.last_name, role.title AS role,m.last_name AS managers_last_name
         FROM employee e
         LEFT JOIN role ON e.role_id = role.id
         LEFT JOIN employee m ON e.manager_id = m.id
+        ORDER BY ${order}
         
         `);
     },

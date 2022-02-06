@@ -17,8 +17,6 @@ module.exports = {
                 'View All Departments',
                 'View All Roles',
                 'View All Employees',
-                'View Employees By Manager',
-                'Veiw Employees By Department',
                 'View Department Budgets',
             new inquirer.Separator('-------------------------------'),
             new inquirer.Separator('           -Add Data-'),
@@ -38,6 +36,14 @@ module.exports = {
         }]);
     },
 
+    async chooseOrder() {
+        return inquirer.prompt([{
+            type: 'list',
+            name: 'order',
+            message: 'Organized by: ',
+            choices: ['id','last_name','manager','department']
+        }]);
+    },
     async addDepartment() {
         return inquirer.prompt([{
             type: 'input',

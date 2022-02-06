@@ -17,7 +17,19 @@ const runFunction = {
     },
     /////
     async viewAllEmployees() {
-        await sqlCommand.showEmployees();
+        const answer = await userPrompts.chooseOrder();
+        switch (answer.order) {
+            case 'id':
+            case 'last_name':
+                await sqlCommand.showEmployees(answer.order);
+                break;
+            case 'manager':
+                await sqlCommand.showEmployeesByManager();
+                break;
+            case 'department':
+                await sqlCommand.showEmployeesByDepartment();
+                break;
+        }
     },
     /////
     async viewEmployeesByManager() {
@@ -56,7 +68,7 @@ const runFunction = {
         //get a list of department names 
         let list = await sqlData.makeArray(`SELECT name FROM department`, 'name')
 
-            //run prompt for adding a role and pass the list of department names to display in the prompt as choices
+        //run prompt for adding a role and pass the list of department names to display in the prompt as choices
         await userPrompts.addRole(list)
             .then(async ({ newTitle, newSalary, depName }) => {
 
@@ -95,7 +107,7 @@ const runFunction = {
                     //get role id and employee id from retruned names
                     let roleId = await sqlData.makeArray(`SELECT id FROM role WHERE title = '${role}'`, 'id');
                     let managerId = await sqlData.makeArray(`SELECT id FROM employee WHERE first_name = '${managerNameArray[1]}' AND last_name = '${managerNameArray[0]}'`, 'id');
-                    
+
                     await sqlCommand.addEmployee(first, last, roleId, managerId);
 
 
@@ -117,7 +129,7 @@ const runFunction = {
         //get the array of combined first and last bnames
         let employees = await getFirstLastArray();
 
-            //add cancle to the arrays as prompt choices
+        //add cancle to the arrays as prompt choices
         employees.push('CANCLE');
         roles.push('CANCLE');
         await userPrompts.updateEmployeeRole(employees, roles)
@@ -135,7 +147,7 @@ const runFunction = {
                 if (employee[0] !== 'CANCLE' && newRole[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeRole(employeeId, roleId);
 
-                    console.log(`\n${employee[0]} ${employee[1]}'s role changed to ${newRole}\n`);
+                    console.log(`\n${employee[1]} ${employee[0]}'s role changed to ${newRole}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
@@ -178,7 +190,7 @@ const runFunction = {
                 if (employee[0] !== 'CANCLE' && newManager[0] !== 'CANCLE') {
                     await sqlCommand.updateEmployeeManager(employeeId, managerId);
 
-                    console.log(`\n${employee[0]} ${employee[1]}'s manager changed to ${newManager[1]} ${newManager[2]}\n`);
+                    console.log(`\n${employee[1]} ${employee[0]}'s manager changed to ${newManager[1]} ${newManager[0]}\n`);
                 } else {
                     console.log(`\ncanceled\n`);
                 }
@@ -199,7 +211,7 @@ const runFunction = {
         await userPrompts.deleteCatagoryType(deps, roles, employees)
 
             .then(async ({ catagory, delDep, delRole, delEmpl, check }) => {
-                    //if nothing was cancled and the user confirmed that they wanted to delete the selected entry, run deletion
+                //if nothing was cancled and the user confirmed that they wanted to delete the selected entry, run deletion
                 if (delDep, delRole, delEmpl !== 'CANCLE' && check == 'YES' && catagory !== 'None') {
                     //all returned del* variables will be undefined except the one selected by the user
                     if (delDep !== undefined) {
@@ -245,7 +257,7 @@ async function getFirstLastArray() {
     //gets th two arrays of names
     let first = await sqlData.makeArray(`SELECT first_name FROM employee`, 'first_name');
     let last = await sqlData.makeArray(`SELECT last_name FROM employee`, 'last_name');
-//for each element in 'last' add the value of 'first' of the same index
+    //for each element in 'last' add the value of 'first' of the same index
     for (let i = 0; i < last.length; i++) {
         last[i] += ', ' + first[i];
     }
