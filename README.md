@@ -32,7 +32,7 @@ Once both are installed:
 
 ## Usage
 Select an option from the main menu and follow the prompts to input or update data.  
-# [Link to Video Preview](https://watch.screencastify.com/v/W6wShDbnR1XdaTWpgTdF)           
+# [Link to Video Preview](https://watch.screencastify.com/v/edWqJGJMJOdPy2cfkRGq)           
 ## Questions
 Chris Kurz              [Github](https://github.com/chriskurz098)
 
