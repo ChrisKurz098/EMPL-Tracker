@@ -22,9 +22,9 @@ Once both are installed:
         DB_USER=[your user name]  
         DB_PW= [your password]  
 - log into mysql from the root folder EMPL-Tracker and run the following to create the needed database and tables:  
-    source db/db.sql  
-    source db/schema.sql  
-    source db/seeds.sql (only needed for testing)  
+    source db/db.sql;  
+    source db/schema.sql;  
+    source db/seeds.sql; (only needed for testing)  
     [This step is only needed initially]
 
 - run: node EMPLT from the root directory
