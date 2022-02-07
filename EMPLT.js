@@ -8,7 +8,7 @@ const runFunction = require('./util/functions');
 
 
 console.log(`
-Welcom to:
+Welcome to:
  _______ ___ ___ _______ ___        _______                 __               
 |   _   |   Y   |   _   |   |______|       .----.---.-.----|  |--.-----.----.
 |.  1___|.      |.  1   |.  |______|.|   | |   _|  _  |  __|    <|  -__|   _|
