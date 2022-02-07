@@ -7,7 +7,7 @@ module.exports = {
        return inquirer.prompt([{
             type: 'list',
             name: 'type',
-            message: 'Please choos a table style: ',
+            message: 'Please choose a table style: ',
             choices: ['Solid Line','Dotted Line']
         }])
     },
